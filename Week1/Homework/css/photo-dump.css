@@ -6,7 +6,6 @@
   /* 행과 열을 함께 다루는 Grid 레이아웃 사용 */
   display: grid;
   width: 100%;
-  max-width: 900px;
   gap: 12px;
 }
 
@@ -14,8 +13,8 @@
   display: grid;
   /* 최소 너비는 0이고, 남은 공간을 1:1:2 비율로 나눔 */
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 2fr);
-  /* 위쪽 사진들의 행 높이를 140px로 고정 */
-  grid-template-rows: 140px;
+  /* 위쪽 사진들의 행 높이를 250px로 고정 */
+  grid-template-rows: 250px;
   gap: 12px;
 }
 
@@ -23,8 +22,8 @@
   display: grid;
   /* 아래쪽 영역을 3:1 비율의 두 열로 나눔 */
   grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
-  /* 높이가 140px인 행을 두 개 생성 */
-  grid-template-rows: repeat(2, 140px);
+  /* 높이가 250px인 행을 두 개 생성 */
+  grid-template-rows: repeat(2, 250px);
   gap: 12px;
 }
 
