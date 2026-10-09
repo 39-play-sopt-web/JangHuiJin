@@ -1,0 +1,137 @@
+.interest-grid {
+  /* 카드들을 행과 열로 배치 */
+  display: grid;
+  /* 넓은 화면에서는 같은 너비의 5열 */
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.interest-card {
+  /* 이미지, 제목, 버튼을 위에서 아래로 배치 */
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #ececec;
+  border-radius: 8px;
+  background-color: white;
+  /* hover 전후 움직임과 그림자를 부드럽게 연결 */
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* 카드에 마우스를 올리면 위로 이동하고 그림자 표시 */
+.interest-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 20px rgba(62, 48, 82, 0.18);
+}
+
+/* 카드의 바로 아래 자식인 이미지만 선택 */
+.interest-card > img {
+  display: block;
+  width: 100%;
+  /* 모든 썸네일을 같은 4:3 비율로 유지 */
+  aspect-ratio: 4 / 3;
+  /* 이미지 비율을 유지하며 썸네일을 채우고 넘치는 부분은 자름 */
+  object-fit: cover;
+}
+
+.interest-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  /* 제목과 버튼을 카드의 가로 가운데에 배치 */
+  align-items: center;
+  gap: 10px;
+  padding: 12px 8px;
+}
+
+.interest-content > h3 {
+  margin: 0;
+  font-size: 14px;
+  text-align: center;
+}
+
+.interest-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  /* 카드마다 버튼을 아래쪽에 맞춤 */
+  margin-top: auto;
+}
+
+.interest-actions > button {
+  /* 내용 크기에 맞는 작은 알약 모양 버튼 */
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 999px;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+/* 첫 번째 버튼인 좋아요에 마우스를 올렸을 때 */
+.interest-actions > button:first-child {
+  background-color: #7fc9eb;
+}
+
+.interest-actions > button:first-child:hover {
+  background-color: #55b4df;
+}
+
+/* 마지막 버튼인 싫어요에 마우스를 올렸을 때 */
+.interest-actions > button:last-child {
+  background-color: #f28b82;
+}
+
+.interest-actions > button:last-child:hover {
+  background-color: #df6f67;
+}
+
+/* 키보드로 버튼을 선택했을 때 현재 위치를 표시 */
+.interest-actions > button:focus-visible {
+  outline: 3px solid #a996c4;
+  outline-offset: 2px;
+}
+
+/* 화면이 좁아질수록 5열 → 4열 → 3열 → 2열로 변경 */
+@media (max-width: 1100px) {
+  .interest-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .interest-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 650px) {
+  .interest-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .interest-content {
+    padding: 10px;
+  }
+}
+
+/* 모션 감소 설정을 사용하면 카드 이동 애니메이션을 제거 */
+@media (prefers-reduced-motion: reduce) {
+  .interest-card,
+  .interest-actions > button {
+    transition: none;
+  }
+
+  .interest-card:hover {
+    transform: none;
+  }
+}

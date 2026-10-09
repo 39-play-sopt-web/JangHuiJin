@@ -1,0 +1,44 @@
+nav {
+  display: flex;
+  /* 목차 링크를 위에서 아래 방향으로 배치 */
+  flex-direction: column;
+  /* 원래 위치를 유지하다가 top 위치에 도달하면 고정 */
+  position: sticky;
+  top: 120px;
+}
+
+/* nav의 바로 아래 자식인 a 태그만 선택 */
+nav > a {
+  display: flex;
+  background-color: #ebebeb;
+  color: #000000;
+  width: 150px;
+  height: 40px;
+  /* 위 10px, 오른쪽 0, 아래 10px, 왼쪽 20px */
+  padding: 10px 0 10px 20px;
+  /* 링크 안의 글자를 세로 가운데에 정렬 */
+  align-items: center;
+  /* 자리를 유지하면서 부모 배경이 보이는 투명 구분선 */
+  border-bottom: 1px solid transparent;
+  /* 링크 배경색이 테두리 영역까지 칠해지지 않게 함 */
+  background-clip: padding-box;
+  /* 링크의 기본 밑줄 제거 */
+  text-decoration: none;
+}
+
+/* 목차 hover 시 색상 변경 */
+nav > a:hover {
+  background-color: #a0a0a0;
+  color: #f5f5f5;
+}
+
+/* nav 안에서 첫 번째 자식인 링크 선택 */
+nav > a:first-child {
+  border-radius: 12px 12px 0 0;
+}
+
+/* nav 안에서 마지막 자식인 링크 선택 */
+nav > a:last-child {
+  border-radius: 0 0 12px 12px;
+  border-bottom: none;
+}

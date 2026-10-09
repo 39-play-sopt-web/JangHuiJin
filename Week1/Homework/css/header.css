@@ -1,0 +1,41 @@
+header {
+  height: 80px;
+  /* 자식 요소를 가로 한 줄로 배치 */
+  display: flex;
+  flex-direction: row;
+  /* 자식들의 좌우 공간을 비슷하게 분배 */
+  justify-content: space-around;
+  /* 자식들을 세로 가운데에 정렬 */
+  align-items: center;
+  background-color: #f8f8f8e3;
+  /* 스크롤과 무관하게 상단 고정 */
+  position: fixed;
+  /* fixed 요소를 화면의 위·왼쪽·오른쪽에 붙임 */
+  top: 0;
+  left: 0;
+  right: 0;
+  /* 다른 콘텐츠보다 앞쪽에 표시 */
+  z-index: 100;
+  /* 헤더 전체를 90% 불투명하게 표시 */
+  opacity: 0.9;
+}
+
+.header-left img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-left: 20px;
+  /* box-shadow 값이 변할 때 0.2초 동안 부드럽게 전환 */
+  transition: box-shadow 0.2s;
+}
+
+/* 아바타 이미지 hover 시 그림자 효과 */
+.header-left img:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.header-right img {
+  width: 50px;
+  height: 50px;
+  margin-right: 20px;
+}

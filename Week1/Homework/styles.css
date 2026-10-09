@@ -1,0 +1,9 @@
+/* 기능별 CSS 파일을 불러오는 진입점 */
+@import url("./css/header.css");
+@import url("./css/navigation.css");
+@import url("./css/layout.css");
+@import url("./css/photo-dump.css");
+@import url("./css/album.css");
+@import url("./css/interests.css");
+@import url("./css/webtory.css");
+@import url("./css/footer.css");
