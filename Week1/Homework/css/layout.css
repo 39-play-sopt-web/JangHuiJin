@@ -1,0 +1,23 @@
+/* 목차와 본문을 포함하는 전체 페이지 레이아웃 */
+main {
+  /* 목차가 차지한 공간을 제외한 나머지 너비 사용 */
+  flex: 1;
+  /* 내용이 길어도 main이 Flex 영역 밖으로 밀려나지 않게 함 */
+  min-width: 0;
+}
+
+main > section {
+  /* 목차로 이동했을 때 섹션 제목이 고정 헤더에 가리지 않게 함 */
+  scroll-margin-top: 120px;
+  min-height: 500px;
+}
+
+.page-layout {
+  display: flex;
+  /* 목차와 본문을 각각 자신의 높이로 두고 위쪽에 정렬 */
+  align-items: flex-start;
+  /* 목차와 본문 사이 간격 */
+  gap: 20px;
+  /* 고정된 헤더와 본문이 겹치지 않도록 위쪽 공간 확보 */
+  padding-top: 100px;
+}

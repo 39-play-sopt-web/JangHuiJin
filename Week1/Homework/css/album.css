@@ -1,0 +1,75 @@
+/* 사진첩 가로 스크롤 섹션 */
+.album {
+  /* 내용이 가로로 넘치면 앨범 안에 가로 스크롤 생성 */
+  overflow-x: auto;
+  /* 스크롤을 놓으면 가로축의 가장 가까운 스냅 위치에 맞춤 */
+  scroll-snap-type: x mandatory;
+  /* Firefox에서 스크롤바를 숨기되 스크롤 기능은 유지 */
+  scrollbar-width: none;
+}
+
+/* Chrome, Edge, Safari 계열의 스크롤바 선택 */
+.album::-webkit-scrollbar {
+  display: none;
+}
+
+.album-track {
+  display: flex;
+  /* 자식 사진 전체가 들어갈 만큼 트랙 너비를 확장 */
+  width: max-content;
+  gap: 20px;
+  /* album-scroll을 40초 동안 일정한 속도로 무한 반복 */
+  animation: album-scroll 40s linear infinite;
+}
+
+/* 마우스를 올리거나 키보드 초점이 앨범 안에 있으면 자동 이동 일시정지 */
+.album:hover .album-track,
+.album:focus-within .album-track {
+  animation-play-state: paused;
+}
+
+.album-group {
+  display: flex;
+  gap: 20px;
+}
+
+.album-item {
+  border-radius: 10px;
+  /* 늘어나거나 줄어들지 않고 각 사진의 가로 크기를 260px로 고정 */
+  flex: 0 0 260px;
+  height: 180px;
+  overflow: hidden;
+  /* 스크롤이 끝났을 때 사진의 시작 부분에 맞춰 정렬 */
+  scroll-snap-align: start;
+}
+
+.album-item > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s;
+}
+
+.album-item:hover > img {
+  transform: scale(1.1);
+}
+
+@keyframes album-scroll {
+  /* 애니메이션 시작 위치 */
+  from {
+    transform: translateX(0);
+  }
+
+  /* 트랙 너비의 10%와 10px만큼 왼쪽으로 이동 */
+  to {
+    transform: translateX(calc(-10% - 10px));
+  }
+}
+
+/* 사용자가 운영체제에서 모션 감소를 선택했다면 자동 이동을 끔 */
+@media (prefers-reduced-motion: reduce) {
+  .album-track {
+    animation: none;
+  }
+}
