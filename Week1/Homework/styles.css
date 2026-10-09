@@ -1,3 +1,4 @@
+/*헤더 섹션*/
 header {
   height: 80px;
   display: flex;
@@ -130,5 +131,69 @@ main > section {
 
 /*이미지 hover 시 사진 확대*/
 .photo-item:hover > img {
-  transform: scale(1.05);
+  transform: scale(1.1);
+}
+
+/*앨범 섹션*/
+.album {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.album::-webkit-scrollbar {
+  display: none;
+}
+
+.album-track {
+  display: flex;
+  width: max-content;
+  gap: 20px;
+  animation: album-scroll 40s linear infinite;
+}
+
+.album:hover .album-track,
+.album:focus-within .album-track {
+  animation-play-state: paused;
+}
+
+.album-group {
+  display: flex;
+  gap: 20px;
+}
+
+.album-item {
+  border-radius: 10px;
+  flex: 0 0 260px;
+  height: 180px;
+  overflow: hidden;
+  scroll-snap-align: start;
+}
+
+.album-item > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s;
+}
+
+.album-item:hover > img {
+  transform: scale(1.1);
+}
+
+@keyframes album-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-10% - 10px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .album-track {
+    animation: none;
+  }
 }
