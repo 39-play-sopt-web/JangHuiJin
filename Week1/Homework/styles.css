@@ -1,0 +1,32 @@
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #f8f8f8;
+  /*스크롤과 무관하게 상단 고정*/
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.header-left img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-left: 20px;
+  transition: box-shadow 0.2s;
+}
+
+/*아바타 이미지 hover 시 그림자 효과*/
+.header-left img:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.header-right img {
+  width: 50px;
+  height: 50px;
+  margin-right: 20px;
+}
