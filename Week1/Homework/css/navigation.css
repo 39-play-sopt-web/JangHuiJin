@@ -1,4 +1,3 @@
-/* 사이드 목차 */
 nav {
   display: flex;
   /* 목차 링크를 위에서 아래 방향으로 배치 */
@@ -11,7 +10,8 @@ nav {
 /* nav의 바로 아래 자식인 a 태그만 선택 */
 nav > a {
   display: flex;
-  background-color: #cececee3;
+  background-color: #ebebeb;
+  color: #000000;
   width: 150px;
   height: 40px;
   /* 위 10px, 오른쪽 0, 아래 10px, 왼쪽 20px */
@@ -28,7 +28,7 @@ nav > a {
 
 /* 목차 hover 시 색상 변경 */
 nav > a:hover {
-  background-color: #8a859e;
+  background-color: #a0a0a0;
   color: #f5f5f5;
 }
 

@@ -1,4 +1,3 @@
-/* 관심사 카드 섹션 */
 .interest-grid {
   /* 카드들을 행과 열로 배치 */
   display: grid;
