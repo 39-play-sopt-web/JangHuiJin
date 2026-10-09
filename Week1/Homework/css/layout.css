@@ -9,7 +9,7 @@ main {
 main > section {
   /* 목차로 이동했을 때 섹션 제목이 고정 헤더에 가리지 않게 함 */
   scroll-margin-top: 120px;
-  min-height: 500px;
+  margin-bottom: 100px;
 }
 
 .page-layout {
