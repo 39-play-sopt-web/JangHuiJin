@@ -1,4 +1,16 @@
+/* 색정리*/
+:root {
+  --green: #99f6df;
+  --green-light: #e2fff6;
+  --green-dark: #93cebf;
+  --gray: #ececec;
+  --line: #d1d1d1;
+  --red: #b40000;
+  --white: #ffffff;
+  --dim: rgb(0 0 0 / 40%);
+}
+
 body {
   margin: 0;
-  background-color: white;
+  background-color: var(--white);
 }

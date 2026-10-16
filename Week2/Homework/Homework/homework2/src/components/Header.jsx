@@ -42,7 +42,7 @@ export default Header;
 const header = css`
   display: flex;
   align-items: center;
-  background-color: white;
+  background-color: var(--gray);
   padding: 0 30px;
 `;
 
@@ -66,12 +66,12 @@ const button = css`
   font-weight: bold;
 
   &:hover {
-    background-color: #e2fff6;
+    background-color: var(--green-light);
   }
 `;
 
 const selected = css`
-  background-color: #99f6df;
+  background-color: var(--green);
 `;
 
 const right = css`
@@ -84,12 +84,12 @@ const right = css`
 const select = css`
   padding: 10px 10px;
   border-radius: 10px;
-  background-color: white;
+  background-color: var(--white);
 `;
 
 const timer = css`
   padding: 10px 20px;
   border-radius: 10px;
-  background-color: #99f6df;
+  background-color: var(--green);
   font-weight: bold;
 `;

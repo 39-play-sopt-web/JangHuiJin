@@ -1,14 +1,14 @@
 import { useState } from "react";
 import Header from "./components/Header";
 import Game from "./components/Game";
+import Ranking from "./components/Ranking";
 
 let timerId = null; 
 let seconds = 0;
 
 function App() {
   const [currentTab, setCurrentTab] = useState("game"); 
-  const [elapsedTime, setElapsedTime] = useState(0); 
-  const [round, setRound] = useState(0); 
+  const [elapsedTime, setElapsedTime] = useState(0);
   const [level, setLevel] = useState(1); 
 
   /* 타이머 시작 */
@@ -45,13 +45,12 @@ function App() {
     setLevel(Number(event.target.value));
   }
 
-  /* 완료 버튼을 눌렀을 때 타이머 초기화 */
+  /* 확인을 누르면 타이머 초기화 */
   function resetTimer() {
-    clearInterval(timerId); 
+    clearInterval(timerId);
     timerId = null;
-    seconds = 0; 
-    setElapsedTime(0); 
-    setRound(round + 1);
+    seconds = 0;
+    setElapsedTime(0);
   }
 
   return (
@@ -65,7 +64,6 @@ function App() {
       />
       {currentTab === "game" && ( /* 게임 탭일 때만 게임 표시 */
         <Game
-          key={level + "-" + round} /* 레벨이나 라운드가 바뀌면 판을 새로 만듦 */
           level={level}
           elapsedTime={elapsedTime}
           onStart={startTimer}
@@ -73,6 +71,7 @@ function App() {
           onRestart={resetTimer}
         />
       )}
+      {currentTab === "ranking" && <Ranking />}
     </>
   );
 }

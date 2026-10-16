@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 /* 배열 랜덤으로 셔플하는 함수 */
@@ -32,6 +32,19 @@ function Game({ level, elapsedTime, onStart, onFinish, onRestart }) {
   /* 다음 숫자*/
   const [nextNumber, setNextNumber] = useState(1);
   const [showAlert, setShowAlert] = useState(false);
+
+  /* 칸, 남은 숫자, 다음 숫자, 종료 창을 각각 처음 값으로 초기화 */
+  function resetBoard() {
+    setNumbers(shuffle(makeNumbers(1, half)));
+    setNumbers2(shuffle(makeNumbers(half + 1, total)));
+    setNextNumber(1);
+    setShowAlert(false);
+  }
+
+  /* 레벨이 바뀌면 그 레벨 숫자로 판을 다시 만든다 */
+  useEffect(() => {
+    resetBoard();
+  }, [level]);
 
   /* 숫자 클릭 함수*/
   function handleClick(clickedNumber, index) {
@@ -85,7 +98,14 @@ function Game({ level, elapsedTime, onStart, onFinish, onRestart }) {
             <div css={alert}>
               <p css={title}>🎉Level {level} 클리어!🎉</p>
               <p css={clearTime}>{elapsedTime.toFixed(2)}초</p>
-              <button type="button" css={confirm} onClick={onRestart}>
+              <button
+                type="button"
+                css={confirm}
+                onClick={() => {
+                  resetBoard();
+                  onRestart();
+                }}
+              >
                 확인
               </button>
             </div>
@@ -134,14 +154,14 @@ const overlay = css`
   justify-content: center;
   width: 100%;
   height: 100%;
-  background-color: rgb(0 0 0 / 40%);
+  background-color: var(--dim);
 `;
 
 const alert = css`
   display: flex;
   flex-direction: column;
   width: 300px;
-  background-color: white;
+  background-color: var(--white);
   align-items: center;
   gap: 20px;
   padding: 30px;
@@ -164,7 +184,7 @@ const confirm = css`
   padding: 10px 40px;
   border: none;
   border-radius: 10px;
-  background-color: #99f6df;
+  background-color: var(--green);
   font-size: 20px;
   font-weight: bold;
 `;
@@ -173,12 +193,12 @@ const cell = css`
   height: 150px;
   border: none;
   border-radius: 10px;
-  background-color: #99f6df;
+  background-color: var(--green);
   font-size: 30px;
   font-weight: bold;
   &:active {
     scale: 0.9;
     transition: scale 0.1s ease-in-out;
-    background-color:rgb(147, 206, 191);
+    background-color: var(--green-dark);
   }
 `;
