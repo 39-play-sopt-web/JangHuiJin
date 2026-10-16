@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-function Header({ elapsedTime, currentTab, onTabChange }) {
+function Header({ elapsedTime, currentTab, onTabChange, level, onLevelChange }) {
   return (
     <header css={header}>
       <h2 css={title}>🔢숫자 클릭 게임</h2>
@@ -24,7 +24,7 @@ function Header({ elapsedTime, currentTab, onTabChange }) {
       <div css={right}>
         {currentTab === "game" && (
           <>
-            <select css={select} aria-label="레벨 선택">
+            <select value={level} onChange={onLevelChange} css={select} aria-label="레벨 선택">
               <option value="1">Level 1 (3x3)</option>
               <option value="2">Level 2 (4x4)</option>
               <option value="3">Level 3 (5x5)</option>
