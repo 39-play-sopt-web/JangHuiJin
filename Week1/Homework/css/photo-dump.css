@@ -56,3 +56,21 @@
   /* 원래 크기의 1.1배로 확대 */
   transform: scale(1.1);
 }
+
+/* 좁은 화면에서는 사진을 한 열로 배치 */
+@media (max-width: 650px) {
+  .photo-top,
+  .photo-bottom {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-auto-rows: auto;
+  }
+
+  .photo-item {
+    aspect-ratio: 4 / 3;
+  }
+
+  .photo-bottom > .photo-item:first-child {
+    grid-row: auto;
+  }
+}

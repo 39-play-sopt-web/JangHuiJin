@@ -1,3 +1,10 @@
+:root {
+  --like-color: #7fc9eb;
+  --like-hover-color: #55b4df;
+  --dislike-color: #f28b82;
+  --dislike-hover-color: #df6f67;
+}
+
 .interest-grid {
   /* 카드들을 행과 열로 배치 */
   display: grid;
@@ -79,20 +86,20 @@
 
 /* 첫 번째 버튼인 좋아요에 마우스를 올렸을 때 */
 .interest-actions > button:first-child {
-  background-color: #7fc9eb;
+  background-color: var(--like-color);
 }
 
 .interest-actions > button:first-child:hover {
-  background-color: #55b4df;
+  background-color: var(--like-hover-color);
 }
 
 /* 마지막 버튼인 싫어요에 마우스를 올렸을 때 */
 .interest-actions > button:last-child {
-  background-color: #f28b82;
+  background-color: var(--dislike-color);
 }
 
 .interest-actions > button:last-child:hover {
-  background-color: #df6f67;
+  background-color: var(--dislike-hover-color);
 }
 
 /* 키보드로 버튼을 선택했을 때 현재 위치를 표시 */
