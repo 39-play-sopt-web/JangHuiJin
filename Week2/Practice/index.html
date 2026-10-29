@@ -1,0 +1,28 @@
+<!-- 반복문으로 3000까지 리스트로 출력하는 실습 -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <button onClick="onClick()">리스트 추가하기</button>
+    <ul id="ul"></ul>
+  </body>
+  <script>
+    // 🟢 2번: good!
+    const onClick = () => {
+      const ul = document.getElementById("ul");
+      let list = "";
+
+      for (let i = 1; i <= 3000; i++) {
+        list += `<li>${i}</li>`;
+      }
+
+      // 한 번만 갱신
+      ul.innerHTML = list;
+    };
+  </script>
+</html>
