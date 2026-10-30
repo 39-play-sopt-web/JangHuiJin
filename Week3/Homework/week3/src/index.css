@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-mint: var(--brand-mint);
+  --color-line: var(--brand-line);
+}
