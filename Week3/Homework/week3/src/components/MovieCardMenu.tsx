@@ -20,8 +20,8 @@ function MovieCardMenu({ selectedCategory, setSelectedCategory }:
                                 : 'bg-gray-200 hover:bg-gray-300'
                         }`}
                     >
-                        {/* 카테고리를 클릭하면 선택된 카테고리(평점 기준)로 영화를 필터링한다. */}
-                        <button onClick={() => setSelectedCategory(item)}>{item}</button>
+                        {/* 카테고리를 클릭하면 버튼이 부모에게 글자를 넘긴다. 예를 들어 handleSelect('9점 이상')이 실행됨, MovieCard.tsx의 41-44 참고*/}
+                        <button onClick={() => setSelectedCategory(item)}>{item}</button> 
                     </li>
                 ))}
             </ul>

@@ -13,6 +13,26 @@ export interface MovieListResponse { // 영화 목록 응답
     results: Movie[]
 }
 
+export interface MovieDetail { // 영화 상세 정보
+    id: number
+    title: string
+    poster_path: string | null
+    backdrop_path: string | null
+    release_date: string
+    runtime: number | null
+    vote_average: number
+    overview: string
+    genres: { id: number; name: string }[]
+    original_title: string
+    original_language: string
+    status: string
+    vote_count: number
+    budget: number
+    revenue: number
+    production_countries: { name: string }[]
+    spoken_languages: { english_name: string }[]
+}
+
 function ratingParams(category: string) { // 평점 기준 파라미터
     switch (category) {
         case '9점 이상':
@@ -37,9 +57,9 @@ export async function getMovies(page: number, category: string) { // 영화 목�
     return data
 }
 
-export async function getMovieDetails(movieId: string) { // 영화 상세 정보 가져오기 api
-    const {data} = await apiClient.get("/movie/${movieId}");
-    return data;
+export async function getMovieDetails(movieId: number) { // 영화 상세 정보 가져오기 api
+    const { data } = await apiClient.get<MovieDetail>(`/movie/${movieId}`)
+    return data
 }
 
 export async function getGuestSessionId() { // 게스트 세션 아이디 가져오기 api

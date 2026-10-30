@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { getMovies, type Movie } from '../apis/get'
 import MovieCardMenu from './MovieCardMenu'
 
-function MovieCard() {
+function MovieCard({ onSelectMovie }: { onSelectMovie: (movieId: number) => void }) { 
     const [movies, setMovies] = useState<Movie[]>([]) // 화면에 보여줄 영화 목록
     const [page, setPage] = useState(1) // useState로 페이지 번호를 관리
     const [selectedCategory, setSelectedCategory] = useState('전체') // 선택된 카테고리
@@ -44,7 +44,7 @@ function MovieCard() {
             />
             <div className="movie-card-list grid w-full grid-cols-5 gap-4"> 
                     {movies.map((movie) => (
-                        <li key={movie.id} className = "movie-card flex flex-col hover:scale-105 duration-300 cursor-pointer bg-gray-200 rounded-lg">
+                        <li key={movie.id} onClick={() => onSelectMovie(movie.id)} className = "movie-card flex flex-col hover:scale-105 duration-300 cursor-pointer bg-gray-200 rounded-lg">
                         <div className="relative">
                             <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
                             alt={movie.title} 
