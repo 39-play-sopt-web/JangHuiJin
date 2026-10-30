@@ -1,6 +1,3 @@
-import React from 'react'   
-
-
 function Header() {
   return (
     <div className="header flex items-left justify-left p-5 pl-8  border-b-3 border-line">
