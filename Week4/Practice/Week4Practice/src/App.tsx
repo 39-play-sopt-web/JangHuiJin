@@ -1,73 +1,129 @@
-// 4. 버튼을 클릭하면 조회가 되게 해보자!
-// 입력한 ID로 조건부 fetch 하기
+// 수정 기능까지 넣어보기
+// title / content 중 원하는 값만 입력하기
+// (PUT은 title, content 둘 다 필수라서 비워둔 값은 기존 값으로 채워서 보내요!)
 
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import axios from "axios";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 
-const getPostDetail = async (postId: number) => {
-  // 게시글 상세 조회 요청
+const POST_ID = 43;
+
+type UpdatePostPayload = {
+  title: string;
+  content: string;
+};
+
+const getPostDetail = async (id: number) => {
   const response = await axios.get(
-    `${import.meta.env.VITE_API_URL}/posts/${postId}`,
+    `${import.meta.env.VITE_API_URL}/posts/${id}`,
   );
-  return response.data.data; // 실제 게시글 정보는 data.data에 담겨 있음
+  return response.data.data;
+};
+
+const updatePost = async ({
+  id,
+  payload,
+}: {
+  id: number;
+  payload: UpdatePostPayload;
+}) => {
+  const response = await axios.put(
+    `${import.meta.env.VITE_API_URL}/posts/${id}`,
+    payload,
+    {
+      headers: {
+        Authorization: import.meta.env.VITE_AUTH_CODE, // 접두사(Bearer) 없이 그대로!
+      },
+    },
+  );
+  return response.data.data;
 };
 
 function App() {
-  // 입력 필드 값(빈 문자열 허용)
-  const [inputValue, setInputValue] = useState("1");
-  // 실제로 조회할 ID
-  const [postId, setPostId] = useState(1);
-  // 버튼을 눌러야 실행되도록 제어
-  const [shouldFetch, setShouldFetch] = useState(false);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
 
-  // 버튼 눌러야 실행되도록 enabled 사용
-  const { data, isPending, isFetching, isError, error } = useQuery({
-    queryKey: ["post", postId],
-    queryFn: () => getPostDetail(postId),
-    enabled: shouldFetch, // shouldFetch가 true일 때만 쿼리 실행
+  const queryClient = useQueryClient();
+
+  const { data, isPending, isError, error } = useQuery({
+    queryKey: ["post", POST_ID],
+    queryFn: () => getPostDetail(POST_ID),
   });
 
-  const handleFetch = () => {
-    if (!inputValue.trim()) return;
-    const parsed = Number(inputValue);
-    if (Number.isNaN(parsed)) return;
-    setPostId(parsed);
-    setShouldFetch(true);
+  const { mutate, isPending: isMutating } = useMutation({
+    mutationFn: (payload: UpdatePostPayload) =>
+      updatePost({ id: POST_ID, payload }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["post", POST_ID] });
+
+      setTitle("");
+      setContent("");
+    },
+  });
+
+  const buildPayload = (): UpdatePostPayload => {
+    // 입력하지 않은 값은 기존 게시글 값으로 채우기
+    return {
+      title: title.trim() || data.title,
+      content: content.trim() || data.content,
+    };
   };
+
+  if (isPending) return <div>로딩 중...</div>;
+  if (isError) return <div>에러: {error.message}</div>;
+
   return (
     <div
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: 8,
-        justifyContent: "center",
         alignItems: "center",
-        marginBottom: 12,
+        justifyContent: "center",
+        gap: 8,
       }}
     >
-      <h1>게시글 상세</h1>
-      <input
-        type="number"
-        value={inputValue}
-        onChange={(e) => {
-          setInputValue(e.target.value);
-          setShouldFetch(false); // 타이핑 중에는 요청 안 나가도록
+      <h1>내 게시글</h1>
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
         }}
-        placeholder="게시글 ID"
-      />
-      <button onClick={handleFetch}>데이터 가져오기</button>
-      {(isPending || isFetching) && shouldFetch && <div>로딩 중...</div>}
-      {isError && <div>에러: {error.message}</div>}
-      {data && (
-        <div>
-          <h2>{data.title}</h2>
-          <p>id: {data.id}</p>
-          <p>content: {data.content}</p>
-          <p>author: {data.author}</p>
-          <p>createdAt: {data.createdAt}</p>
-        </div>
-      )}
+      >
+        {data && (
+          <>
+            <p>title: {data.title}</p>
+            <p>content: {data.content}</p>
+            <p>author: {data.author}</p>
+            <p>updatedAt: {data.updatedAt}</p>
+          </>
+        )}
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          gap: 8,
+          flexWrap: "wrap",
+          justifyContent: "center",
+        }}
+      >
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="새 제목"
+        />
+        <input
+          type="text"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="새 본문"
+        />
+        <button onClick={() => mutate(buildPayload())} disabled={isMutating}>
+          {isMutating ? "수정 중..." : "게시글 수정"}
+        </button>
+      </div>
     </div>
   );
 }
