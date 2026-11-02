@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createPortal } from "react-dom";
 
 /* 배열 랜덤으로 셔플하는 함수 */
@@ -27,8 +27,9 @@ function Game({ level, elapsedTime, onStart, onFinish, onRestart }) {
   const half = size * size; /* 처음에 보여줄 앞 절반 개수 */
   const total = half * 2; /* 마지막 숫자. 18, 32, 50 */
 
-  const [numbers, setNumbers] = useState(shuffle(makeNumbers(1, half)));
-  const [numbers2, setNumbers2] = useState(shuffle(makeNumbers(half + 1, total)));
+  /* 다시 렌더링될 때마다 배열을 섞지 않도록 함수로 전달 */
+  const [numbers, setNumbers] = useState(() => shuffle(makeNumbers(1, half)));
+  const [numbers2, setNumbers2] = useState(() => shuffle(makeNumbers(half + 1, total)));
   /* 다음 숫자*/
   const [nextNumber, setNextNumber] = useState(1);
   const [showAlert, setShowAlert] = useState(false);
@@ -41,11 +42,6 @@ function Game({ level, elapsedTime, onStart, onFinish, onRestart }) {
     setShowAlert(false);
   }
 
-  /* 레벨이 바뀌면 그 레벨 숫자로 판을 다시 만든다 */
-  useEffect(() => {
-    resetBoard();
-  }, [level]);
-
   /* 숫자 클릭 함수*/
   function handleClick(clickedNumber, index) {
     if (clickedNumber != nextNumber) { /* 클릭한 숫자가 다음 숫자가 아니면 무시 */
@@ -54,7 +50,7 @@ function Game({ level, elapsedTime, onStart, onFinish, onRestart }) {
 
     const newNumbers = [...numbers]; /* 화면 숫자 배열 복사 */
 
-    if (clickedNumber <= half) { /* 앞 절반이면 그 자리에 뒷 절반의 첫 숫자를 넣는다 */
+    if (numbers2.length > 0) { /* 채울 숫자가 남아 있으면 교체 */
       newNumbers[index] = numbers2[0];
       setNumbers2(numbers2.slice(1)); /* 넣은 숫자는 뒷 절반 배열에서 뺀다 */
     } else { /* 뒷 절반이면 숫자와 배경을 없앤다 */
@@ -137,12 +133,14 @@ const number = css`
 
 const board = (size) => css`
   display: grid;
-  grid-template-columns: repeat(${size}, 150px);
+  grid-template-columns: repeat(${size}, minmax(0, 1fr));
+  width: 90%; /* 좁은 화면에서는 게임판도 함께 줄어듦 */
+  max-width: ${size * 150 + (size - 1) * 10}px;
   gap: 10px;
 `;
 
 const empty = css`
-  height: 150px;
+  aspect-ratio: 1; /* 숫자가 사라져도 정사각형 자리 유지 */
 `;
 
 const overlay = css`
@@ -190,7 +188,7 @@ const confirm = css`
 `;
 
 const cell = css`
-  height: 150px;
+  aspect-ratio: 1; /* 너비에 맞춰 높이도 줄어듦 */
   border: none;
   border-radius: 10px;
   background-color: var(--green);

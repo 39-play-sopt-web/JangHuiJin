@@ -5,6 +5,7 @@ import Ranking from "./components/Ranking";
 
 let timerId = null; 
 let seconds = 0;
+let startTime = 0;
 
 function App() {
   const [currentTab, setCurrentTab] = useState("game"); 
@@ -15,14 +16,17 @@ function App() {
   function startTimer() {
     if (timerId != null) return;
 
+    startTime = Date.now(); /* 시작 시각 저장 */
     timerId = setInterval(() => {
-      seconds = Math.round((seconds + 0.01) * 100) / 100; /* 0.01초를 더하고 소수 둘째 자리로 정리 */
+      seconds = (Date.now() - startTime) / 1000; /* 실행이 늦어져도 실제 지난 시간으로 계산 */
       setElapsedTime(seconds); /* state에도 업데이트 */
     }, 10); /* 0.01초마다 실행 */
   }
 
   /* 타이머 종료 */
   function stopTimer() {
+    seconds = (Date.now() - startTime) / 1000; /* 마지막 클릭 시점의 시간 저장 */
+    setElapsedTime(seconds);
     clearInterval(timerId); 
     timerId = null;
 
@@ -53,17 +57,25 @@ function App() {
     setElapsedTime(0);
   }
 
+  /* 메뉴가 바뀌면 진행 중인 타이머도 초기화 */
+  function changeTab(tab) {
+    if (tab === currentTab) return;
+    resetTimer();
+    setCurrentTab(tab);
+  }
+
   return (
     <>
       <Header
         currentTab={currentTab} /* 현재 탭 */
-        onTabChange={setCurrentTab} /* 탭 버튼을 눌렀을 때 currentTab 업데이트 */
+        onTabChange={changeTab}
         elapsedTime={elapsedTime} /* 헤더에 표시되는 초 */
         level={level}
         onLevelChange={changeLevel}
       />
       {currentTab === "game" && ( /* 게임 탭일 때만 게임 표시 */
         <Game
+          key={level} /* 레벨이 바뀌면 게임을 새로 만들어 초기화 */
           level={level}
           elapsedTime={elapsedTime}
           onStart={startTimer}
