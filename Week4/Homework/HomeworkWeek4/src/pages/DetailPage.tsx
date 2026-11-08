@@ -30,6 +30,13 @@ const UpdatePost = async (id: number, payload: { title: string, content: string 
     return response.data.data;
 }
 
+const DeletePost = async (id: number) => {
+        const response = await axios.delete(`${import.meta.env.VITE_API_URL}/posts/${id}`, {
+            headers: { Authorization: localStorage.getItem("authorizationCode"), }
+        });
+        return response.data.data;
+}
+
 
 function DetailPage() {
 
@@ -53,14 +60,26 @@ function DetailPage() {
         mutationFn: () => UpdatePost(id, { title, content }),
         onSuccess: () => {
             alert("게시글이 수정되었어요.");
-            queryClient.invalidateQueries({ queryKey: ["post", id] });
-            queryClient.invalidateQueries({ queryKey: ["posts"] });
+            //invalidateQueries 옵션을 사용해 'posts' 키를 가진 쿼리를 무효화해서 목록을 새로고침함
+            queryClient.invalidateQueries({ queryKey: ["post", id] }); //게시글 상세 
+            queryClient.invalidateQueries({ queryKey: ["posts"] }); //목록 
             setIsEditing(false);
         },
         onError: () => {
             alert("게시글 수정에 실패했어요.");
         },
     });
+
+    const {mutate: deletePost} = useMutation({
+        mutationFn: () => DeletePost(id),
+        onSuccess: () => {
+            navigate("/posts");
+            queryClient.invalidateQueries({ queryKey: ["posts"] });
+        },
+        onError: () => {
+            alert("게시글 삭제에 실패했어요.");
+        },
+    })
 
     
     if (isPending) return <Page>게시글을 불러오는 중입니다.</Page>;
@@ -116,7 +135,11 @@ function DetailPage() {
                         }}>
                         수정
                     </OutlineButton>
-                    <PrimaryButton type="button">삭제</PrimaryButton>
+                    <PrimaryButton type="button" onClick={()=> {
+                        if (window.confirm("정말 게시글을 삭제할까요?")) {
+                            deletePost();
+                        }
+                    }}>삭제</PrimaryButton>
                 </ButtonRow>
             </Card>
         </Page>
