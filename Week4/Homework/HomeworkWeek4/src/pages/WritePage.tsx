@@ -2,11 +2,12 @@
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router";
 import { useState } from "react";
-import axios from "axios";
-import { useMutation } from "@tanstack/react-query";
+import apiClient from "../apis/apiClient";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
     
 function WritePage() {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
     const [page, setPage] = useState(1);
     const [title, setTitle] = useState("");
@@ -22,13 +23,14 @@ function WritePage() {
     };
 
     const {mutate, isPending, isError} = useMutation({
-        mutationFn: () => { return axios.post(`${import.meta.env.VITE_API_URL}/posts`, {
+        mutationFn: () => { return apiClient.post("/posts", {
             title,
             content,
             author,
         },
             { headers: { Authorization: localStorage.getItem("authorizationCode"), }});},
         onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["posts"] });
             alert(`${author}님, 게시글이 작성되었어요!`);
             navigate("/posts");
         },

@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import apiClient from "../apis/apiClient";
 
 
 type PostResponse = {
@@ -15,8 +15,8 @@ type PostResponse = {
     }
 }
 const GetPostsDetail = async (id: number) => {
-    const response = await axios.get<PostResponse>(
-        `${import.meta.env.VITE_API_URL}/posts/${id}`, {
+    const response = await apiClient.get<PostResponse>(
+        `/posts/${id}`, {
     }
     )
     
@@ -24,14 +24,14 @@ const GetPostsDetail = async (id: number) => {
 }
 
 const UpdatePost = async (id: number, payload: { title: string, content: string }) => {
-    const response = await axios.put(`${import.meta.env.VITE_API_URL}/posts/${id}`, payload, {
+    const response = await apiClient.put(`/posts/${id}`, payload, {
         headers: { Authorization: localStorage.getItem("authorizationCode"), }
     });
     return response.data.data;
 }
 
 const DeletePost = async (id: number) => {
-        const response = await axios.delete(`${import.meta.env.VITE_API_URL}/posts/${id}`, {
+        const response = await apiClient.delete(`/posts/${id}`, {
             headers: { Authorization: localStorage.getItem("authorizationCode"), }
         });
         return response.data.data;
@@ -41,6 +41,15 @@ const DeletePost = async (id: number) => {
 function DetailPage() {
 
     const navigate = useNavigate();
+
+    const checkAuthorization = () => {
+        if (!localStorage.getItem("authorizationCode")) {
+            alert("먼저 파트를 선택하고 코드를 발급받아 주세요.");
+            navigate("/", { replace: true });
+            return false;
+        }
+        return true;
+    };
 
     const [isEditing, setIsEditing] = useState(false);
     const [title, setTitle] = useState("");
@@ -106,7 +115,10 @@ function DetailPage() {
                     <OutlineButton type="button" onClick={() => setIsEditing(false)}>
                         취소
                     </OutlineButton>
-                    <PrimaryButton type="button" onClick={() => mutate()}>
+                    <PrimaryButton type="button" onClick={() => {
+                        if (!checkAuthorization()) return;
+                        mutate();
+                    }}>
                         수정 완료
                     </PrimaryButton>
                 </ButtonRow>
@@ -129,13 +141,16 @@ function DetailPage() {
                 <Divider />
                 <ButtonRow>
                     <OutlineButton type="button" onClick={() => 
-                        {setIsEditing(true);
+                        {
+                        if (!checkAuthorization()) return;
+                        setIsEditing(true);
                         setTitle(data.title);
                         setContent(data.content);
                         }}>
                         수정
                     </OutlineButton>
                     <PrimaryButton type="button" onClick={()=> {
+                        if (!checkAuthorization()) return;
                         if (window.confirm("정말 게시글을 삭제할까요?")) {
                             deletePost();
                         }

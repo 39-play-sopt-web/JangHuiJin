@@ -1,5 +1,5 @@
 // 코드 발급 타이틀 페이지
-import axios from "axios";
+import apiClient from "../apis/apiClient";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router";
@@ -14,8 +14,8 @@ type CodeResponse = {
 };
 
 const postAuthorizationCode = async (part: Part) => {
-  const response = await axios.post<CodeResponse>(
-    `${import.meta.env.VITE_API_URL}/members/authorization-code`, {part},
+  const response = await apiClient.post<CodeResponse>(
+    "/members/authorization-code", {part},
   );
   return response.data.data.authorizationCode;
 };
@@ -78,11 +78,7 @@ function TitlePage() {
         <ListButton
           type="button"
           onClick={() => {
-            if (part !== "") {
-              navigate("/posts");
-            } else {
-              alert("먼저 파트를 선택하고 코드를 발급받아 주세요.");
-            }
+            navigate("/posts");
           }}
         >
           게시판 목록 보기
