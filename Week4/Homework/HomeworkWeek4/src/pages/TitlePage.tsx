@@ -30,12 +30,10 @@ function TitlePage() {
     onSuccess: (authorizationCode) => {
       localStorage.setItem("authorizationCode", authorizationCode);
       localStorage.setItem("part", part);
-      console.log("Authorization Code:", authorizationCode);
       alert("회원코드가 발급되었습니다.");
       navigate("/posts");
     },
-    onError: (error) => {
-      console.error("Error:", error);
+    onError: () => {
       alert("회원코드 발급에 실패했습니다.");
     },
   });

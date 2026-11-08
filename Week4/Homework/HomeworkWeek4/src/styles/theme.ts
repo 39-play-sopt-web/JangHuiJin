@@ -8,6 +8,7 @@ const theme = {
     lineDark: "#5e6672",
     primary: "#73c4b1",
     primaryHover: "#2ad4b8",
+    error: "#ff453a",
   },
 };
 
