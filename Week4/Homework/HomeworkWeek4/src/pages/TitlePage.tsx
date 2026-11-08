@@ -1,3 +1,4 @@
+// 코드 발급 타이틀 페이지
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
@@ -23,11 +24,12 @@ function TitlePage() {
   const [part, setPart] = useState<Part | "">("");
   const navigate = useNavigate();
 
-  // useMutation 정의
+  // 코드 발급 요청
   const { mutate, isPending, isError } = useMutation({
     mutationFn: postAuthorizationCode,
     onSuccess: (authorizationCode) => {
       localStorage.setItem("authorizationCode", authorizationCode);
+      localStorage.setItem("part", part);
       console.log("Authorization Code:", authorizationCode);
       alert("회원코드가 발급되었습니다.");
       navigate("/posts");
@@ -40,6 +42,7 @@ function TitlePage() {
 
   return (
     <Page>
+      <Content>
       <Title>PLAY SOPT 게시판</Title>
       <Description>파트를 선택하면 코드가 발급됩니다.</Description>
       <Form>
@@ -51,6 +54,7 @@ function TitlePage() {
             disabled={isPending}
             onChange={(event) => {
               const value = event.target.value;
+
               if (value === "WEB" || value === "ANDROID" || value === "iOS") {
                 setPart(value);
               }
@@ -87,6 +91,7 @@ function TitlePage() {
         </ListButton>
         {isError && <Error>회원코드 발급에 실패했습니다. 다시 시도해주세요.</Error>}
       </Form>
+      </Content>
     </Page>
   );
 }
@@ -101,6 +106,12 @@ const Page = styled.main`
   min-height: 100vh;
 `;
 
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 400px;
+`;
 const Title = styled.h1`
   margin: 0;
   font-size: 24px;
@@ -117,7 +128,7 @@ const Form = styled.div`
   flex-direction: column;
   position: relative;
   gap: 12px;
-  width: 400px;
+  width: 100%;
 `;
 
 const Row = styled.div`
@@ -136,10 +147,15 @@ const Select = styled.select`
   flex: 1;
   height: 44px;
   padding: 0 12px;
-  border: none;
+  border: 1px solid transparent;
   border-radius: 8px;
+  outline: none;
   background: ${({ theme }) => theme.colors.surface};
   color: ${({ theme }) => theme.colors.text};
+
+  &:focus {
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const IssueButton = styled.button`
@@ -150,6 +166,7 @@ const IssueButton = styled.button`
   background: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.background};
   transition: background-color 0.2s ease;
+  font-weight: 800;
 
   &:hover:not(:disabled) {
     background: ${({ theme }) => theme.colors.primaryHover};
@@ -160,8 +177,12 @@ const ListButton = styled.button`
   height: 44px;
   border: 1px solid ${({ theme }) => theme.colors.line};
   border-radius: 8px;
-  background: transparent;
+  background: transparent;  
+  transition: border-color 0.2s ease;
   color: ${({ theme }) => theme.colors.text};
+  &:hover:not(:disabled) {
+    border-color: ${({ theme }) => theme.colors.lineDark};
+  }
 `;
 
 const Error = styled.p`
