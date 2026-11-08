@@ -13,6 +13,7 @@ function WritePage() {
     const [content, setContent] = useState("");
     const [author, setAuthor] = useState("");
 
+
     const handleNext = () => {
         setPage(page + 1);
     };
@@ -26,7 +27,7 @@ function WritePage() {
             content,
             author,
         },
-            { headers: { Authorization: `Bearer ${localStorage.getItem("authorizationCode")}` }});},
+            { headers: { Authorization: localStorage.getItem("authorizationCode"), }});},
         onSuccess: () => {
             alert(`${author}님, 게시글이 작성되었어요!`);
             navigate("/posts");
@@ -35,6 +36,7 @@ function WritePage() {
             alert("게시글 작성에 실패했어요.");
         },
     });
+
 
     return (
         <Page>
