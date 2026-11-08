@@ -78,7 +78,11 @@ function TitlePage() {
         <ListButton
           type="button"
           onClick={() => {
-            navigate("/posts");
+            if (part !== "") {
+              navigate("/posts");
+            } else {
+              alert("먼저 파트를 선택하고 코드를 발급받아 주세요.");
+            }
           }}
         >
           게시판 목록 보기
