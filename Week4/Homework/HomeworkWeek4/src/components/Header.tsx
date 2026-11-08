@@ -5,6 +5,12 @@ import styled from "@emotion/styled";
 function Header() {
   const navigate = useNavigate();
 
+    const handleLogout = () => {
+        localStorage.removeItem("authorizationCode");
+        localStorage.removeItem("part");
+        navigate("/");
+    };
+
   // 타이틀 페이지에서 저장한 파트
   const part = localStorage.getItem("part");
 
@@ -17,7 +23,7 @@ function Header() {
       <Nav>
         <NavLink to="/posts">게시글 목록</NavLink>
         <NavLink to="/write">글쓰기</NavLink>
-        <LogoutButton type="button">로그아웃</LogoutButton>
+        <LogoutButton type="button" onClick={handleLogout}>로그아웃</LogoutButton>
       </Nav>
     </Bar>
   );

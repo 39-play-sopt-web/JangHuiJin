@@ -67,7 +67,7 @@ function TitlePage() {
           </Select>
           <IssueButton
             type="button"
-            disabled={isPending}
+            disabled={isPending || part === ""}
             onClick={() => {
               if (part !== "") {
                 mutate(part);
