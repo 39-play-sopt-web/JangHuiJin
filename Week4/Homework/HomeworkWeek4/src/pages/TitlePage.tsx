@@ -112,6 +112,7 @@ const Content = styled.div`
   align-items: flex-start;
   width: 400px;
 `;
+
 const Title = styled.h1`
   margin: 0;
   font-size: 24px;
@@ -127,8 +128,8 @@ const Form = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  gap: 12px;
   width: 100%;
+  gap: 12px;
 `;
 
 const Row = styled.div`
@@ -149,9 +150,9 @@ const Select = styled.select`
   padding: 0 12px;
   border: 1px solid transparent;
   border-radius: 8px;
-  outline: none;
   background: ${({ theme }) => theme.colors.surface};
   color: ${({ theme }) => theme.colors.text};
+  outline: none;
 
   &:focus {
     border-color: ${({ theme }) => theme.colors.primary};
@@ -165,8 +166,8 @@ const IssueButton = styled.button`
   border-radius: 8px;
   background: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.background};
-  transition: background-color 0.2s ease;
   font-weight: 800;
+  transition: background-color 0.2s ease;
 
   &:hover:not(:disabled) {
     background: ${({ theme }) => theme.colors.primaryHover};
@@ -177,9 +178,10 @@ const ListButton = styled.button`
   height: 44px;
   border: 1px solid ${({ theme }) => theme.colors.line};
   border-radius: 8px;
-  background: transparent;  
-  transition: border-color 0.2s ease;
+  background: transparent;
   color: ${({ theme }) => theme.colors.text};
+  transition: border-color 0.2s ease;
+
   &:hover:not(:disabled) {
     border-color: ${({ theme }) => theme.colors.lineDark};
   }

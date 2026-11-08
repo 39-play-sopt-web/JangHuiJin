@@ -74,14 +74,16 @@ const NavLink = styled(RouterLink)`
   color: ${({ theme }) => theme.colors.text};
   font-size: 14px;
   font-weight: 700;
+  text-decoration: none;
   transition: color 0.2s ease;
+
   &.active {
     color: ${({ theme }) => theme.colors.primary};
   }
+
   &:hover {
     color: ${({ theme }) => theme.colors.primary};
   }
-  text-decoration: none;
 `;
 
 const LogoutButton = styled.button`
@@ -90,6 +92,6 @@ const LogoutButton = styled.button`
   background: transparent;
   color: ${({ theme }) => theme.colors.text};
   font-size: 14px;
-  cursor: pointer;
   font-weight: 700;
+  cursor: pointer;
 `;
