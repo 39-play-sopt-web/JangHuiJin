@@ -1,27 +1,28 @@
 import apiClient from "./apiClient";
+import { ratingParams, type RatingFilter } from "../constants/ratingFilters";
+import { backdropUrl, posterUrl } from "../utils/format";
 
-export interface Movie { // 영화 정보
+export interface Movie {
     id: number
     title: string
     poster_path: string | null
+    posterUrl: string | null
     vote_average: number
     release_date: string
     overview: string
 }
 
-export interface MovieListResponse { // 영화 목록 응답
-    results: Movie[]
+type MovieResponse = Omit<Movie, 'posterUrl'>
+
+export interface MovieListResponse {
+    results: MovieResponse[]
+    total_pages: number
 }
 
-export interface MovieDetail { // 영화 상세 정보
-    id: number
-    title: string
-    poster_path: string | null
+export interface MovieDetail extends Movie {
     backdrop_path: string | null
-    release_date: string
+    backdropUrl: string | null
     runtime: number | null
-    vote_average: number
-    overview: string
     genres: { id: number; name: string }[]
     original_title: string
     original_language: string
@@ -33,37 +34,35 @@ export interface MovieDetail { // 영화 상세 정보
     spoken_languages: { english_name: string }[]
 }
 
-function ratingParams(category: string) { // 평점 기준 파라미터
-    switch (category) {
-        case '9점 이상':
-            return { 'vote_average.gte': 9 }
-        case '8-9점':
-            return { 'vote_average.gte': 8, 'vote_average.lte': 8.9 }
-        case '7-8점':
-            return { 'vote_average.gte': 7, 'vote_average.lte': 7.9 }
-        case '6-7점':
-            return { 'vote_average.gte': 6, 'vote_average.lte': 6.9 }
-        case '6점 미만':
-            return { 'vote_average.lte': 5.9 }
-        default:
-            return {}
+type MovieDetailResponse = Omit<MovieDetail, 'posterUrl' | 'backdropUrl'>
+
+function withPoster(movie: MovieResponse): Movie {
+    return {
+        ...movie,
+        posterUrl: posterUrl(movie.poster_path),
     }
 }
 
-export async function getMovies(page: number, category: string) { // 영화 목록 가져오기 api
+export async function getMovies(page: number, filter: RatingFilter) {
     const { data } = await apiClient.get<MovieListResponse>("/discover/movie", {
-        params: { page, ...ratingParams(category) },
+        params: { page, ...ratingParams(filter) },
     })
-    return data
+    return {
+        results: data.results.map(withPoster),
+        total_pages: data.total_pages,
+    }
 }
 
-export async function getMovieDetails(movieId: number) { // 영화 상세 정보 가져오기 api
-    const { data } = await apiClient.get<MovieDetail>(`/movie/${movieId}`)
-    return data
+export async function getMovieDetails(movieId: number): Promise<MovieDetail> {
+    const { data } = await apiClient.get<MovieDetailResponse>(`/movie/${movieId}`)
+    return {
+        ...data,
+        posterUrl: posterUrl(data.poster_path),
+        backdropUrl: backdropUrl(data.backdrop_path),
+    }
 }
 
-export async function getGuestSessionId() { // 게스트 세션 아이디 가져오기 api
-    const {data} = await apiClient.get("/authentication/guest_session/new");
+export async function getGuestSessionId() {
+    const { data } = await apiClient.get("/authentication/guest_session/new");
     return data;
 }
-
